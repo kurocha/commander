@@ -25,8 +25,10 @@ namespace Commander
 
 		virtual IteratorT parse(IteratorT begin, IteratorT end);
 
+		virtual void print_usage(std::ostream & output) const noexcept;
+
 		virtual void invoke();
-		
+
 		auto value() const noexcept {return _command;}
 	};
 }

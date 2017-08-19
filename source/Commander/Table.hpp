@@ -10,12 +10,15 @@
 
 #include "Parser.hpp"
 
+#include <iosfwd>
+
 namespace Commander
 {
 	class Field;
 	
 	class Table
 	{
+	protected:
 		std::vector<Field *> _ordered;
 
 	public:
@@ -27,5 +30,7 @@ namespace Commander
 		IteratorT parse(IteratorT begin, IteratorT end);
 
 		virtual void invoke();
+		
+		virtual void print_usage(std::ostream &) const noexcept;
 	};
 }

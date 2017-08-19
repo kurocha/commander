@@ -8,9 +8,23 @@
 
 #include "Options.hpp"
 
+#include <iostream>
+
 namespace Commander
 {
 	Options::~Options()
 	{
+	}
+	
+	void Options::print_usage(std::ostream & output) const noexcept
+	{
+		bool first = true;
+		
+		for (auto field : _ordered) {
+			if (!first) output << ' ';
+			else first = false;
+			
+			field->print_usage(output);
+		}
 	}
 }

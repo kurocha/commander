@@ -10,6 +10,8 @@
 
 #include "Command.hpp"
 
+#include <iostream>
+
 namespace Commander
 {
 	Commands::~Commands()
@@ -33,7 +35,12 @@ namespace Commander
 
 		return begin;
 	}
-
+	
+	void Commands::print_usage(std::ostream & output) const noexcept
+	{
+		output << "<command>";
+	}
+	
 	void Commands::invoke()
 	{
 		if (_command)

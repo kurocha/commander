@@ -78,5 +78,18 @@ namespace Commander
 				examiner.expect(program.commands.value()) == &program.help;
 			}
 		},
+		
+		{"it prints basic usage",
+			[](UnitTest::Examiner & examiner) {
+				Table table;
+				Commands commands{table};
+				Program program{commands};
+				
+				std::stringstream buffer;
+				program.print_usage(buffer);
+				
+				examiner.expect(buffer.str()) == "-d/--debug <command>";
+			}
+		},
 	};
 }

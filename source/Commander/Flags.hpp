@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <iosfwd>
 
 namespace Commander
 {
@@ -26,4 +27,6 @@ namespace Commander
 
 		auto keys() const {return _keys;}
 	};
+	
+	std::ostream & operator<<(std::ostream & output, const Flags & flags);
 }

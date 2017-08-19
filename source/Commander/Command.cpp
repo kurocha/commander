@@ -8,6 +8,8 @@
 
 #include "Command.hpp"
 
+#include <iostream>
+
 namespace Commander
 {
 	Command::~Command()
@@ -27,5 +29,13 @@ namespace Commander
 		}
 
 		return begin;
+	}
+	
+	void Command::print_usage(std::ostream & output) const noexcept
+	{
+		if (!_name.empty())
+			output << _name << ' ';
+		
+		table.print_usage(output);
 	}
 }

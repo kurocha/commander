@@ -17,5 +17,7 @@ namespace Commander
 	public:
 		using Map::Map;
 		virtual ~Options();
+		
+		virtual void print_usage(std::ostream & output) const noexcept;
 	};
 }

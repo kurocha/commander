@@ -26,6 +26,8 @@ namespace Commander
 		virtual ~Command();
 
 		virtual IteratorT parse(IteratorT begin, IteratorT end);
+		
+		virtual void print_usage(std::ostream & output) const noexcept;
 
 		virtual void invoke()
 		{

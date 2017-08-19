@@ -10,6 +10,8 @@
 
 #include "Field.hpp"
 
+#include <iostream>
+
 namespace Commander
 {
 	void Table::invoke()
@@ -25,5 +27,17 @@ namespace Commander
 		}
 
 		return begin;
+	}
+	
+	void Table::print_usage(std::ostream & output) const noexcept
+	{
+		bool first = true;
+		
+		for (auto field : _ordered) {
+			if (!first) output << ' ';
+			else first = false;
+			
+			field->print_usage(output);
+		}
 	}
 }

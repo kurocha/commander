@@ -26,6 +26,8 @@ namespace Commander
 				 options.insert(key, this);
 		}
 
+		virtual ~Option() {}
+
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			if (begin != end) {
@@ -36,6 +38,11 @@ namespace Commander
 			}
 
 			return begin;
+		}
+
+		virtual void print_usage(std::ostream & output) const noexcept
+		{
+			output << _flags << ' ' << "[value]";
 		}
 
 		auto flags() const noexcept {return _flags;}
@@ -55,11 +62,18 @@ namespace Commander
 				options.insert(key, this);
 		}
 
+		virtual ~Option() {}
+
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			_value = true;
 
 			return begin;
+		}
+
+		virtual void print_usage(std::ostream & output) const noexcept
+		{
+			output << _flags;
 		}
 
 		auto flags() const noexcept {return _flags;}

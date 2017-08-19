@@ -8,9 +8,23 @@
 
 #include "Flags.hpp"
 
+#include <iostream>
+
 namespace Commander
 {
 	Flags::~Flags()
 	{
+	}
+	
+	std::ostream & operator<<(std::ostream & output, const Flags & flags)
+	{
+		bool first = true;
+		
+		for (auto & key : flags.keys()) {
+			if (!first) output << '/';
+			else first = false;
+			
+			output << key;
+		}
 	}
 }
