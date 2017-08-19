@@ -85,10 +85,13 @@ namespace Commander
 				Commands commands{table};
 				Program program{commands};
 				
+				ArgumentsT arguments{"commander", "-d", "help"};
+				table.parse(arguments.begin(), arguments.end());
+				
 				std::stringstream buffer;
 				program.print_usage(buffer);
 				
-				examiner.expect(buffer.str()) == "-d/--debug <command>";
+				examiner.expect(buffer.str()) == "commander -d/--debug <command>";
 			}
 		},
 	};
