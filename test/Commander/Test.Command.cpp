@@ -47,7 +47,7 @@ namespace Commander
 	class Program : public Command
 	{
 	public:
-		using Command::Command;
+		Program(Commands & commands) : Command(commands) {}
 
 		Options options{table};
 		Option<bool> debug{options, {"-d", "--debug"}, "Enable debug assertions and output."};
