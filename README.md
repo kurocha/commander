@@ -1,10 +1,6 @@
 # Commander
 
-Commander is a fantastic project with lots of potential.
-
-For examples and documentation please see the main [project page][1].
-
-[1]: http://teapot.nz/
+Commander is a command line parser for C++.
 
 [![Build Status](https://travis-ci.org/kurocha/commander.svg?branch=master)](https://travis-ci.org/kurocha/commander)
 
@@ -23,7 +19,7 @@ To fetch project dependencies, run the following:
 	$ cd commander
 	$ teapot fetch
 
-### Validate Behaviour
+### Unit Tests
 
 The project can be checked by running unit tests:
 
@@ -32,9 +28,7 @@ The project can be checked by running unit tests:
 
 ## Usage
 
-You can run the tool by executing the following:
-
-	$ teapot Run/Commander
+Please inspect the unit tests to see how to build different kinds of command lines.
 
 ## Contributing
 
