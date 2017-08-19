@@ -26,5 +26,7 @@ namespace Commander
 			
 			output << key;
 		}
+		
+		return output;
 	}
 }
