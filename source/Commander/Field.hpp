@@ -25,6 +25,8 @@ namespace Commander
 		
 		virtual ~Field();
 		
+		Field(const Field &) = delete;
+		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			return begin;

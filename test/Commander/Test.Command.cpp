@@ -19,7 +19,7 @@ namespace Commander
 	{
 		Program * _program;
 	public:
-		Help(Commands & commands, Program * program) : Command(commands, "help"), _program(program) {}
+		Help(Commands & commands, Program * program) : Command(commands, "help", "Print the command usage information."), _program(program) {}
 		
 		virtual ~Help() {}
 		
@@ -33,7 +33,7 @@ namespace Commander
 	{
 		Program * _program;
 	public:
-		Version(Commands & commands, Program * program) : Command(commands, "version"), _program(program) {}
+		Version(Commands & commands, Program * program) : Command(commands, "version", "Print the version."), _program(program) {}
 		
 		virtual ~Version() {}
 		

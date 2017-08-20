@@ -18,7 +18,7 @@ namespace Commander
 	public:
 		Table table;
 
-		Command(Commands & commands, std::string name = "") : Field(commands), _name(name)
+		Command(Commands & commands, std::string name = "", std::string description = "") : Field(commands, description), _name(name)
 		{
 			commands.insert(name, this);
 		}
