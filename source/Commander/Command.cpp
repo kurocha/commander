@@ -34,8 +34,18 @@ namespace Commander
 	void Command::print_usage(std::ostream & output) const noexcept
 	{
 		if (!_name.empty())
-			output << _name << ' ';
+			output << _name;
 		
-		table.print_usage(output);
+		if (!table.empty()) {
+			output << ' ';
+			table.print_usage(output);
+		}
+	}
+	
+	void Command::print_full_usage(std::ostream & output, std::size_t level) const noexcept
+	{
+		Field::print_full_usage(output, level);
+		
+		table.print_full_usage(output, level+1);
 	}
 }

@@ -40,4 +40,11 @@ namespace Commander
 			field->print_usage(output);
 		}
 	}
+	
+	void Table::print_full_usage(std::ostream & output, std::size_t level) const noexcept
+	{
+		for (auto field : _ordered) {
+			field->print_full_usage(output, level);
+		}
+	}
 }

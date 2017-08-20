@@ -26,11 +26,14 @@ namespace Commander
 		{
 			_ordered.push_back(field);
 		}
-
+		
+		bool empty() const noexcept {return _ordered.empty();}
+		
 		IteratorT parse(IteratorT begin, IteratorT end);
 
 		virtual void invoke();
 		
 		virtual void print_usage(std::ostream &) const noexcept;
+		virtual void print_full_usage(std::ostream &, std::size_t level = 0) const noexcept;
 	};
 }

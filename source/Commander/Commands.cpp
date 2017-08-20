@@ -41,6 +41,51 @@ namespace Commander
 		output << "<command>";
 	}
 	
+	void Commands::print_command_usage(std::ostream & output, std::size_t level) const noexcept
+	{
+		output << std::string(level, '\t');
+		
+		print_usage(output);
+		
+		output << ' ';
+		
+		auto size = _fields.size();
+		
+		if (size == 0) {
+			output << "No commands available." << std::endl;
+		} else if (size == 1) {
+			auto front = _fields.begin();
+			output << "Only " << front->first << std::endl;
+		} else {
+			output << "One of ";
+			bool first = true;
+			
+			for (auto & field : _fields) {
+				if (!first) output << ", ";
+				else first = false;
+				
+				output << field.first;
+			}
+			
+			output << std::endl;
+		}
+	}
+	
+	void Commands::print_full_usage(std::ostream & output, std::size_t level) const noexcept
+	{
+		auto next = level;
+		
+		if (level == 0) {
+			
+		} else {
+			print_command_usage(output, next++);
+		}
+		
+		for (auto & field : _fields) {
+			field.second->print_full_usage(output, next);
+		}
+	}
+	
 	void Commands::invoke()
 	{
 		if (_command)

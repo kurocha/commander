@@ -35,6 +35,8 @@ namespace Commander
 		virtual void invoke() {}
 
 		virtual void print_usage(std::ostream & output) const noexcept = 0;
+		
+		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 
 		//virtual const std::string & usage(Output::Lines & lines) const noexcept = 0;
 	};

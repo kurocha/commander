@@ -22,14 +22,14 @@ namespace Commander
 		std::map<std::string, FieldT *> _fields;
 
 	public:
-		Map(Table & table) : Field(table, "Options") {}
+		Map(Table & table, std::string description = "") : Field(table, description) {}
 		virtual ~Map() {}
 		
 		void insert(std::string key, FieldT * option)
 		{
 			_fields.insert({key, option});
 		}
-
+		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			while (begin != end) {

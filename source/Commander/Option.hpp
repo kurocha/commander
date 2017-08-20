@@ -73,7 +73,7 @@ namespace Commander
 
 		virtual void print_usage(std::ostream & output) const noexcept
 		{
-			output << _flags;
+			output << '[' << _flags << ']';
 		}
 
 		auto flags() const noexcept {return _flags;}

@@ -19,6 +19,8 @@ namespace Commander
 		std::vector<ValueT> _value;
 
 	public:
+		virtual ~Split() {}
+		
 		IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			if (begin != end) {
@@ -29,6 +31,11 @@ namespace Commander
 			return begin;
 		}
 
+		virtual void print_usage(std::ostream & output) const noexcept
+		{
+			output << "-- <" << "value" << "...>";
+		}
+		
 		auto & value() const noexcept {return _value;}
 	};
 }

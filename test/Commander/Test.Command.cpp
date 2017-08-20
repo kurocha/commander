@@ -91,7 +91,23 @@ namespace Commander
 				std::stringstream buffer;
 				program.print_usage(buffer);
 				
-				examiner.expect(buffer.str()) == "commander -d/--debug <command>";
+				examiner.expect(buffer.str()) == "commander [-d/--debug] <command>";
+			}
+		},
+		
+		{"it prints detailed usage",
+			[](UnitTest::Examiner & examiner) {
+				Table table;
+				Commands commands{table};
+				Program program{commands};
+				
+				ArgumentsT arguments{"commander", "-d", "help"};
+				table.parse(arguments.begin(), arguments.end());
+				
+				std::stringstream buffer;
+				table.print_full_usage(std::cerr);
+				
+				// examiner.expect(buffer.str()) == "commander [-d/--debug] <command>";
 			}
 		},
 	};

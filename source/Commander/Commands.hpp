@@ -18,6 +18,8 @@ namespace Commander
 	{
 		Command * _command;
 
+		void print_command_usage(std::ostream & output, std::size_t level) const noexcept;
+
 	public:
 		using Map::Map;
 		
@@ -26,6 +28,7 @@ namespace Commander
 		virtual IteratorT parse(IteratorT begin, IteratorT end);
 
 		virtual void print_usage(std::ostream & output) const noexcept;
+		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 
 		virtual void invoke();
 
