@@ -20,7 +20,7 @@ namespace Commander
 	{
 	protected:
 		std::map<std::string, FieldT *> _fields;
-
+		
 	public:
 		Map(Table & table, std::string description = "") : Field(table, description) {}
 		virtual ~Map() {}
@@ -45,5 +45,4 @@ namespace Commander
 			return begin;
 		}
 	};
-
 }

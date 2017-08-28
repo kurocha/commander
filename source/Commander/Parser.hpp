@@ -11,8 +11,22 @@
 #include <vector>
 #include <string>
 
+#include <stdexcept>
+
 namespace Commander
 {
-	using IteratorT = std::vector<std::string>::const_iterator;
-	using ArgumentsT = std::vector<std::string>;
+	using ArgumentT = std::string;
+	using ArgumentsT = std::vector<ArgumentT>;
+	using IteratorT = ArgumentsT::const_iterator;
+	
+	class ArgumentError : public std::invalid_argument
+	{
+	public:
+		ArgumentError(std::string description, IteratorT at) : std::invalid_argument(description), _at(at) {}
+		
+		auto at() const noexcept {return _at;}
+		
+	private:
+		IteratorT _at;
+	};
 }

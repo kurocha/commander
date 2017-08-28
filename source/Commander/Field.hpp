@@ -14,9 +14,6 @@ namespace Commander
 {
 	class Field
 	{
-		Table & _table;
-		std::string _description;
-
 	public:
 		Field(Table & table, std::string description) : _table(table), _description(description)
 		{
@@ -37,8 +34,10 @@ namespace Commander
 		virtual void print_usage(std::ostream & output) const noexcept = 0;
 		
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
-
-		//virtual const std::string & usage(Output::Lines & lines) const noexcept = 0;
+		
+	protected:
+		Table & _table;
+		std::string _description;
 	};
 
 }

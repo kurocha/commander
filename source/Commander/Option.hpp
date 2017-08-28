@@ -14,69 +14,67 @@
 namespace Commander
 {
 	template <typename ValueT>
-	class Option : public Field
+	class GenericOption : public Field
 	{
-		Flags _flags;
-		ValueT _value;
-
 	public:
-		Option(Options & options, Flags flags, std::string description, ValueT initial = ValueT()) : Field(options, description), _flags(flags), _value(initial)
+		GenericOption(Options & options, Flags flags, std::string description, ValueT initial = ValueT()) : Field(options, description), _flags(flags), _value(initial)
 		{
 			for (auto & key : flags.keys())
-				 options.insert(key, this);
+				options.insert(key, this);
 		}
-
+		
+		virtual ~GenericOption() {}
+		
+		auto flags() const noexcept {return _flags;}
+		auto value() const noexcept {return _value;}
+		
+		virtual void print_usage(std::ostream & output) const noexcept
+		{
+			output << '[' << this->_flags << " <value>]";
+		}
+		
+	protected:
+		Flags _flags;
+		ValueT _value;
+	};
+	
+	template <typename ValueT>
+	class Option : public GenericOption<ValueT>
+	{
+	public:
+		using GenericOption<ValueT>::GenericOption;
 		virtual ~Option() {}
-
+		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			if (begin != end) {
 				// consume the value
-				_value = *begin;
+				this->_value = *begin;
 
 				++begin;
 			}
 
 			return begin;
 		}
-
-		virtual void print_usage(std::ostream & output) const noexcept
-		{
-			output << _flags << ' ' << "[value]";
-		}
-
-		auto flags() const noexcept {return _flags;}
-		auto value() const noexcept {return _value;}
 	};
-
+	
 	template <>
-	class Option<bool> : public Field
+	class Option<bool> : public GenericOption<bool>
 	{
-		Flags _flags;
-		bool _value = false;
-
 	public:
-		Option(Options & options, Flags flags, std::string description) : Field(options, description), _flags(flags)
-		{
-			for (auto & key : flags.keys())
-				options.insert(key, this);
-		}
-
+		using GenericOption<bool>::GenericOption;
 		virtual ~Option() {}
 
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
-			_value = true;
+			this->_value = true;
 
 			return begin;
 		}
 
 		virtual void print_usage(std::ostream & output) const noexcept
 		{
-			output << '[' << _flags << ']';
+			output << '[' << this->_flags << ']';
 		}
-
-		auto flags() const noexcept {return _flags;}
-		auto value() const noexcept {return _value;}
 	};
 }
