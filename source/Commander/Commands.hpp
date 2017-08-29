@@ -16,7 +16,7 @@ namespace Commander
 	
 	class Commands : public Map<Command>
 	{
-		Command * _command;
+		Command * _command = nullptr;
 
 		void print_command_usage(std::ostream & output, std::size_t level) const noexcept;
 
@@ -26,11 +26,12 @@ namespace Commander
 		virtual ~Commands();
 
 		virtual IteratorT parse(IteratorT begin, IteratorT end);
+		void set_command(Command * command) {_command = command;}
 
 		virtual void print_usage(std::ostream & output) const noexcept;
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 
-		virtual void invoke();
+		virtual void invoke(Table * top);
 
 		auto value() const noexcept {return _command;}
 	};

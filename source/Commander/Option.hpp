@@ -11,6 +11,8 @@
 #include "Options.hpp"
 #include "Flags.hpp"
 
+#include <iostream>
+
 namespace Commander
 {
 	template <typename ValueT>
@@ -38,11 +40,19 @@ namespace Commander
 		ValueT _value;
 	};
 	
-	template <typename ValueT>
+	template <typename ValueT = std::string>
 	class Option : public GenericOption<ValueT>
 	{
 	public:
 		using GenericOption<ValueT>::GenericOption;
+		virtual ~Option() {}
+	};
+	
+	template <>
+	class Option<std::string> : public GenericOption<std::string>
+	{
+	public:
+		using GenericOption<std::string>::GenericOption;
 		virtual ~Option() {}
 		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)

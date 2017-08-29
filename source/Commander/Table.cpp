@@ -16,8 +16,13 @@ namespace Commander
 {
 	void Table::invoke()
 	{
+		this->invoke(this);
+	}
+	
+	void Table::invoke(Table * top)
+	{
 		for (auto field : _ordered)
-			field->invoke();
+			field->invoke(top);
 	}
 
 	IteratorT Table::parse(IteratorT begin, IteratorT end)
@@ -45,6 +50,7 @@ namespace Commander
 	{
 		for (auto field : _ordered) {
 			field->print_full_usage(output, level);
+			//output << std::endl;
 		}
 	}
 }

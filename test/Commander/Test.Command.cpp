@@ -23,7 +23,7 @@ namespace Commander
 		
 		virtual ~Help() {}
 		
-		virtual void invoke()
+		virtual void invoke(Table * top)
 		{
 			std::cerr << "Help" << std::endl;
 		}
@@ -37,7 +37,7 @@ namespace Commander
 		
 		virtual ~Version() {}
 		
-		virtual void invoke()
+		virtual void invoke(Table * top)
 		{
 			// program.table.print_usage(std::cerr);
 			std::cerr << "Version" << std::endl;

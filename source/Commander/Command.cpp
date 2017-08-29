@@ -44,7 +44,14 @@ namespace Commander
 	
 	void Command::print_full_usage(std::ostream & output, std::size_t level) const noexcept
 	{
-		Field::print_full_usage(output, level);
+		output << std::string(level, '\t');
+		
+		print_usage(output);
+		
+		if (!_description.empty())
+			output << std::endl << std::string(level+1, '\t') << _description;
+		
+		output << std::endl << std::endl;
 		
 		table.print_full_usage(output, level+1);
 	}

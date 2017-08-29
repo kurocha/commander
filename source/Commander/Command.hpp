@@ -18,9 +18,12 @@ namespace Commander
 	public:
 		Table table;
 
-		Command(Commands & commands, std::string name = "", std::string description = "") : Field(commands, description), _name(name)
+		Command(Commands & commands, std::string name = "", std::string description = "", bool initial = false) : Field(commands, description), _name(name)
 		{
 			commands.insert(name, this);
+			
+			if (initial)
+				commands.set_command(this);
 		}
 
 		virtual ~Command();
@@ -31,9 +34,9 @@ namespace Commander
 		
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 		
-		virtual void invoke()
+		virtual void invoke(Table * top)
 		{
-			table.invoke();
+			table.invoke(top);
 		};
 
 	protected:

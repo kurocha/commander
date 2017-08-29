@@ -30,8 +30,10 @@ namespace Commander
 		bool empty() const noexcept {return _ordered.empty();}
 		
 		IteratorT parse(IteratorT begin, IteratorT end);
-
-		virtual void invoke();
+		
+		void invoke();
+		
+		virtual void invoke(Table * top);
 		
 		virtual void print_usage(std::ostream &) const noexcept;
 		virtual void print_full_usage(std::ostream &, std::size_t level = 0) const noexcept;

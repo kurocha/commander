@@ -55,7 +55,7 @@ namespace Commander
 			output << "No commands available." << std::endl;
 		} else if (size == 1) {
 			auto front = _fields.begin();
-			output << "Only " << front->first << std::endl;
+			output << "Only " << front->first << '.' << std::endl;
 		} else {
 			output << "One of ";
 			bool first = true;
@@ -67,7 +67,7 @@ namespace Commander
 				output << field.first;
 			}
 			
-			output << std::endl;
+			output << '.';
 		}
 	}
 	
@@ -78,17 +78,20 @@ namespace Commander
 		if (level == 0) {
 			
 		} else {
-			print_command_usage(output, next++);
+			print_command_usage(output, level);
 		}
 		
+		output << std::endl;
+		
 		for (auto & field : _fields) {
-			field.second->print_full_usage(output, next);
+			output << std::endl;
+			field.second->print_full_usage(output, level);
 		}
 	}
 	
-	void Commands::invoke()
+	void Commands::invoke(Table * top)
 	{
 		if (_command)
-			_command->invoke();
+			_command->invoke(top);
 	}
 }
