@@ -15,9 +15,12 @@ namespace Commander
 	class Help : public Option<bool>
 	{
 	public:
-		using Option<bool>::Option;
+		Help(Options & options, const Field * top);
 		virtual ~Help();
 		
 		virtual void invoke();
+	
+	protected:
+		const Field * _top;
 	};
 }

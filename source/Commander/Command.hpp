@@ -20,9 +20,6 @@ namespace Commander
 	public:
 		Table table;
 
-		Options options{table};
-		Help help{options, {"-h", "--help"}, "Print detailed command usage."};
-
 		Command(Commands & commands, std::string name = "", std::string description = "", bool initial = false) : Field(commands, description), _name(name)
 		{
 			commands.insert(name, this);
@@ -38,15 +35,6 @@ namespace Commander
 		virtual void print_usage(std::ostream & output) const noexcept;
 		
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
-		
-		virtual void invoke()
-		{
-			if (*help) {
-				help.invoke();
-			} else {
-				table.invoke();
-			}
-		};
 
 	protected:
 		std::string _name;

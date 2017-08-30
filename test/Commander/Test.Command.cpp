@@ -34,6 +34,7 @@ namespace Commander
 	public:
 		Program(Commands & commands) : Command(commands) {}
 
+		Options options{table};
 		Option<bool> debug{options, {"-d", "--debug"}, "Enable debug assertions and output."};
 
 		Commands commands{table};
@@ -74,7 +75,7 @@ namespace Commander
 				std::stringstream buffer;
 				program.print_usage(buffer);
 				
-				examiner.expect(buffer.str()) == "commander [-h/--help] [-d/--debug] <command>";
+				examiner.expect(buffer.str()) == "commander [-d/--debug] <command>";
 			}
 		},
 		

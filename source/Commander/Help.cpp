@@ -10,12 +10,17 @@
 
 namespace Commander
 {
+	Help::Help(Options & options, const Field * top) : Option<bool>(options, {"-h", "--help"}, "Print usage information."), _top(top)
+	{
+		
+	}
+	
 	Help::~Help()
 	{
 	}
 	
 	void Help::invoke()
 	{
-		_table.print_full_usage(std::cerr);
+		_top->print_full_usage(std::cerr);
 	}
 }

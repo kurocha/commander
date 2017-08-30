@@ -51,7 +51,7 @@ namespace Commander
 		if (!_description.empty())
 			output << std::endl << std::string(level+1, '\t') << _description;
 		
-		output << std::endl << std::endl;
+		output << std::endl;
 		
 		table.print_full_usage(output, level+1);
 	}
