@@ -30,6 +30,8 @@ namespace Commander
 		auto flags() const noexcept {return _flags;}
 		auto value() const noexcept {return _value;}
 		
+		auto operator*() {return _value;}
+		
 		virtual void print_usage(std::ostream & output) const noexcept
 		{
 			output << '[' << this->_flags << " <value>]";

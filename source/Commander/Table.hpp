@@ -31,9 +31,7 @@ namespace Commander
 		
 		IteratorT parse(IteratorT begin, IteratorT end);
 		
-		void invoke();
-		
-		virtual void invoke(Table * top);
+		virtual void invoke();
 		
 		virtual void print_usage(std::ostream &) const noexcept;
 		virtual void print_full_usage(std::ostream &, std::size_t level = 0) const noexcept;

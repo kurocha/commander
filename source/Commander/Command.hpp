@@ -10,6 +10,8 @@
 
 #include "Table.hpp"
 #include "Commands.hpp"
+#include "Options.hpp"
+#include "Help.hpp"
 
 namespace Commander
 {
@@ -17,6 +19,9 @@ namespace Commander
 	{
 	public:
 		Table table;
+
+		Options options{table};
+		Help help{options, {"-h", "--help"}, "Print detailed command usage."};
 
 		Command(Commands & commands, std::string name = "", std::string description = "", bool initial = false) : Field(commands, description), _name(name)
 		{
@@ -34,9 +39,13 @@ namespace Commander
 		
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 		
-		virtual void invoke(Table * top)
+		virtual void invoke()
 		{
-			table.invoke(top);
+			if (*help) {
+				help.invoke();
+			} else {
+				table.invoke();
+			}
 		};
 
 	protected:

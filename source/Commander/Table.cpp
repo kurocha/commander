@@ -16,13 +16,8 @@ namespace Commander
 {
 	void Table::invoke()
 	{
-		this->invoke(this);
-	}
-	
-	void Table::invoke(Table * top)
-	{
 		for (auto field : _ordered)
-			field->invoke(top);
+			field->invoke();
 	}
 
 	IteratorT Table::parse(IteratorT begin, IteratorT end)

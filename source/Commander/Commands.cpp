@@ -89,9 +89,9 @@ namespace Commander
 		}
 	}
 	
-	void Commands::invoke(Table * top)
+	void Commands::invoke()
 	{
 		if (_command)
-			_command->invoke(top);
+			_command->invoke();
 	}
 }

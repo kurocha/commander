@@ -22,8 +22,6 @@ namespace Commander
 	public:
 		EnumerationProgram(Commands & commands) : Command(commands) {}
 
-		Options options{table};
-		
 		Enumeration<OutputFormat> output_format{options, {"-f", "--output-format"}, "The output pixel buffer format.",
 			OutputFormat::PNG, {
 				{"png", OutputFormat::PNG},

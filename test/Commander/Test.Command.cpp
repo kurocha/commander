@@ -15,32 +15,17 @@ namespace Commander
 {
 	class Program;
 	
-	class Help : public Command
+	class ListThings : public Command
 	{
 		Program * _program;
 	public:
-		Help(Commands & commands, Program * program) : Command(commands, "help", "Print the command usage information."), _program(program) {}
+		ListThings(Commands & commands, Program * program) : Command(commands, "list-things", "Print all the things."), _program(program) {}
 		
-		virtual ~Help() {}
+		virtual ~ListThings() {}
 		
-		virtual void invoke(Table * top)
+		virtual void invoke()
 		{
-			std::cerr << "Help" << std::endl;
-		}
-	};
-
-	class Version : public Command
-	{
-		Program * _program;
-	public:
-		Version(Commands & commands, Program * program) : Command(commands, "version", "Print the version."), _program(program) {}
-		
-		virtual ~Version() {}
-		
-		virtual void invoke(Table * top)
-		{
-			// program.table.print_usage(std::cerr);
-			std::cerr << "Version" << std::endl;
+			std::cerr << "1 2 3 " << _program << std::endl;
 		}
 	};
 	
@@ -49,12 +34,10 @@ namespace Commander
 	public:
 		Program(Commands & commands) : Command(commands) {}
 
-		Options options{table};
 		Option<bool> debug{options, {"-d", "--debug"}, "Enable debug assertions and output."};
 
 		Commands commands{table};
-		Help help{commands, this};
-		Version version{commands, this};
+		ListThings list_things{commands, this};
 	};
 	
 	UnitTest::Suite CommandTestSuite {
@@ -62,7 +45,7 @@ namespace Commander
 		
 		{"it recognize -d",
 			[](UnitTest::Examiner & examiner) {
-				ArgumentsT arguments{"exec", "-d", "help"};
+				ArgumentsT arguments{"exec", "-d", "list-things"};
 				
 				Table table;
 				Commands commands{table};
@@ -75,7 +58,7 @@ namespace Commander
 				
 				examiner.expect(program.debug.value()) == true;
 				
-				examiner.expect(program.commands.value()) == &program.help;
+				examiner.expect(program.commands.value()) == &program.list_things;
 			}
 		},
 		
@@ -85,13 +68,13 @@ namespace Commander
 				Commands commands{table};
 				Program program{commands};
 				
-				ArgumentsT arguments{"commander", "-d", "help"};
+				ArgumentsT arguments{"commander", "-d", "list-things"};
 				table.parse(arguments.begin(), arguments.end());
 				
 				std::stringstream buffer;
 				program.print_usage(buffer);
 				
-				examiner.expect(buffer.str()) == "commander [-d/--debug] <command>";
+				examiner.expect(buffer.str()) == "commander [-h/--help] [-d/--debug] <command>";
 			}
 		},
 		

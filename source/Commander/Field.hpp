@@ -29,7 +29,7 @@ namespace Commander
 			return begin;
 		}
 
-		virtual void invoke(Table * top) {}
+		virtual void invoke() {}
 
 		virtual void print_usage(std::ostream & output) const noexcept = 0;
 		

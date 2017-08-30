@@ -31,7 +31,7 @@ namespace Commander
 		virtual void print_usage(std::ostream & output) const noexcept;
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 
-		virtual void invoke(Table * top);
+		virtual void invoke();
 
 		auto value() const noexcept {return _command;}
 	};
