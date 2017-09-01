@@ -69,12 +69,14 @@ namespace Commander
 			
 			output << '.';
 		}
+		
+		if (_command) {
+			output << " Default: " << _command->name() << ".";
+		}
 	}
 	
 	void Commands::print_full_usage(std::ostream & output, std::size_t level) const noexcept
 	{
-		auto next = level;
-		
 		if (level == 0) {
 			
 		} else {

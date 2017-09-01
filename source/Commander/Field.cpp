@@ -22,6 +22,15 @@ namespace Commander
 		
 		print_usage(output);
 		
-		output << ' ' << _description << std::endl;
+		output << ' ';
+		
+		print_description(output);
+		
+		output << std::endl;
+	}
+	
+	void Field::print_description(std::ostream & output) const noexcept
+	{
+		output << _description;
 	}
 }
