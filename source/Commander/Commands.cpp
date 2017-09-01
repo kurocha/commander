@@ -28,11 +28,13 @@ namespace Commander
 
 			if (pair != _fields.end()) {
 				_command = pair->second;
-
-				begin = pair->second->parse(begin, end);
 			}
 		}
-
+		
+		if (_command) {
+			begin = _command->parse(begin, end);
+		}
+		
 		return begin;
 	}
 	
