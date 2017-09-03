@@ -30,6 +30,7 @@ namespace Commander
 		bool empty() const noexcept {return _ordered.empty();}
 		
 		IteratorT parse(IteratorT begin, IteratorT end);
+		bool parse(const ArgumentsT & arguments);
 		
 		virtual void invoke();
 		

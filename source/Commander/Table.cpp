@@ -14,6 +14,11 @@
 
 namespace Commander
 {
+	bool Table::parse(const ArgumentsT & arguments)
+	{
+		return parse(arguments.begin(), arguments.end()) == arguments.end();
+	}
+	
 	void Table::invoke()
 	{
 		for (auto field : _ordered)

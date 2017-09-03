@@ -8,129 +8,23 @@
 
 #pragma once
 
+#include "Variable.hpp"
 #include "Options.hpp"
 #include "Flags.hpp"
+
+#include "OptionTraits.hpp"
 
 #include <iostream>
 
 namespace Commander
 {
-	enum class Specified {
-		UNSET, DEFAULT, SET
-	};
-	
-	template <typename T>
-	struct OptionTraits
-	{
-		static T parse(IteratorT & begin, IteratorT end)
-		{
-			if (begin != end) {
-				return begin++;
-			} else {
-				throw ArgumentError("Reached end of input!", begin);
-			}
-		}
-		
-		static void assign(T & value, T & value, Specified specified)
-		{
-			option->set_value(value);
-		}
-		
-		static void print_value(const T & value, std::ostream & output)
-		{
-			output << value;
-		}
-		
-		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
-		{
-			output << '[' << option->flags() << " <value>]";
-		}
-	};
-	
-	template<>
-	struct OptionTraits<bool>
-	{
-		static bool parse(IteratorT & begin, IteratorT end)
-		{
-			return true;
-		}
-		
-		template <typename OptionT>
-		static void assign(OptionT * option, T & value)
-		{
-			option->set_value(value);
-		}
-		
-		static void print_value(const bool & value, std::ostream & output)
-		{
-			output << (value ? "yes" : "no");
-		}
-		
-		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
-		{
-			output << '[' << option->flags() << ']';
-		}
-	};
-	
-	template<typename T, typename TraitsT = OptionsTraits<T>>
-	struct OptionTraits<std::vector<T>>
-	{
-		void assign(OptionT * option, T & value)
-		{
-			if (option->specified() == Specified::DEFAULT) {
-				option->value().clear();
-			}
-			
-			option->value().push_back(value);
-		}
-		
-		static void print_value(const std::vector<T> & value, std::ostream & output)
-		{
-			output << '{';
-			bool first = true;
-			for (const auto & item : value) {
-				if (first) first = false;
-				else output << ", ";
-				
-				OptionTraits<T>::print(value, output);
-			}
-			output << '}';
-		}
-		
-		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
-		{
-			output << '[' << option->flags() << " <value>]*";
-		}
-	};
-	
-	template <typename T, typename TraitsT = OptionsTraits<T>>
-	class Option : public Field
+	template <typename ValueT, typename _TraitsT = OptionTraits<ValueT>>
+	class Option : public Field, public Variable<ValueT>
 	{
 	public:
-		Option(Options & options, Flags flags, std::string description, ValueT initial, Specified specified = Specified::DEFAULT) : Field(options, description), _flags(flags), _specified(specified), _value(initial)
-		{
-			for (auto & key : flags.keys())
-				options.insert(key, this);
-		}
+		using TraitsT = _TraitsT;
 		
-		virtual ~Option() {}
-		
-		
-	protected:
-		Flags _flags;
-
-		Specified _specified = Specified::UNSET;
-		ValueT _value;
-	};
-	
-	template <typename ValueT, typename TraitsT = SingleValue<ValueT>>
-	class Option : public Field
-	{
-	public:
-		Option(Options & options, Flags flags, std::string description, ValueT initial, Specified specified = Specified::DEFAULT) : Field(options, description), _flags(flags), _specified(specified), _value(initial)
+		Option(Options & options, Flags flags, std::string description, ValueT initial, Specified specified = Specified::DEFAULT) : Field(options, description), Variable<ValueT>::Variable(initial, specified), _flags(flags)
 		{
 			for (auto & key : flags.keys())
 				options.insert(key, this);
@@ -144,19 +38,15 @@ namespace Commander
 		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
-			if (begin != end) {
-				_value = *begin;
-			}
+			auto value = TraitsT::parse(begin, end);
+			
+			TraitsT::assign(this, value);
+			this->_specified = Specified::SET;
 			
 			return begin;
 		}
 		
-		explicit operator bool() {return _specified != Specified::UNSET;}
-		
 		auto & flags() const noexcept {return _flags;}
-		auto & value() const noexcept {return _value;}
-		
-		auto operator*() {return _value;}
 		
 		virtual void print_usage(std::ostream & output) const noexcept
 		{
@@ -165,14 +55,14 @@ namespace Commander
 		
 		virtual void print_value(std::ostream & output) const noexcept
 		{
-			TraitsT::print_value(_value, output);
+			TraitsT::print_value(this->_value, output);
 		}
 		
 		virtual void print_description(std::ostream & output) const noexcept
 		{
 			Field::print_description(output);
 			
-			switch(_specified) {
+			switch(this->_specified) {
 				case Specified::UNSET:
 					output << " Unset.";
 					break;
@@ -187,32 +77,5 @@ namespace Commander
 		
 	protected:
 		Flags _flags;
-		
-		Specified _specified = Specified::UNSET;
-		ValueT _value;
 	};
-	
-	template <typename ValueT>
-	virtual IteratorT Option<ValueT>::parse(IteratorT begin, IteratorT end)
-	{
-		_value = TraitsT::parse(begin, end);
-		_specified = Specified::SET;
-		
-		return begin;
-	}
-	
-	template <typename ValueT>
-	virtual IteratorT Option<std::vector<ValueT>>::parse(IteratorT begin, IteratorT end)
-	{
-		auto value = TraitsT::parse(begin, end);
-		
-		if (_specified == Specified::DEFAULT) {
-			_value.clear();
-		}
-		
-		_value.push_back(value);
-		_specified = Specified::SET;
-		
-		return begin;
-	}
 }

@@ -18,9 +18,6 @@ namespace Commander
 	template <typename FieldT = Field>
 	class Map : public Field, public Table
 	{
-	protected:
-		std::map<std::string, FieldT *> _fields;
-		
 	public:
 		Map(Table & table, std::string description = "") : Field(table, description) {}
 		virtual ~Map() {}
@@ -44,5 +41,8 @@ namespace Commander
 
 			return begin;
 		}
+		
+	protected:
+		std::map<std::string, FieldT *> _fields;
 	};
 }
