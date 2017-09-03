@@ -18,19 +18,17 @@
 
 namespace Commander
 {
-	template <typename ValueT, typename _TraitsT = OptionTraits<ValueT>>
+	template <typename ValueT, typename OptionTraitsT = OptionTraits<ValueT>>
 	class Option : public Field, public Variable<ValueT>
 	{
 	public:
-		using TraitsT = _TraitsT;
-		
-		Option(Options & options, Flags flags, std::string description, ValueT initial, Specified specified = Specified::DEFAULT) : Field(options, description), Variable<ValueT>::Variable(initial, specified), _flags(flags)
+		Option(Options & options, Flags flags, std::string description, ValueT initial, Specified specified = Specified::DEFAULT, OptionTraitsT traits = OptionTraitsT()) : Field(options, description), Variable<ValueT>::Variable(initial, specified), _flags(flags), _traits(traits)
 		{
 			for (auto & key : flags.keys())
 				options.insert(key, this);
 		}
 		
-		Option(Options & options, Flags flags, std::string description) : Option(options, flags, description, ValueT(), Specified::UNSET)
+		Option(Options & options, Flags flags, std::string description, OptionTraitsT traits = OptionTraitsT()) : Option(options, flags, description, ValueT(), Specified::UNSET, traits)
 		{
 		}
 		
@@ -38,9 +36,9 @@ namespace Commander
 		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
-			auto value = TraitsT::parse(begin, end);
+			auto value = _traits.parse(begin, end);
 			
-			TraitsT::assign(this, value);
+			_traits.assign(this, value);
 			this->_specified = Specified::SET;
 			
 			return begin;
@@ -50,12 +48,12 @@ namespace Commander
 		
 		virtual void print_usage(std::ostream & output) const noexcept
 		{
-			TraitsT::print_usage(this, output);
+			_traits.print_usage(this, output);
 		}
 		
 		virtual void print_value(std::ostream & output) const noexcept
 		{
-			TraitsT::print_value(this->_value, output);
+			_traits.print_value(this->_value, output);
 		}
 		
 		virtual void print_description(std::ostream & output) const noexcept
@@ -77,5 +75,7 @@ namespace Commander
 		
 	protected:
 		Flags _flags;
+		
+		OptionTraitsT _traits;
 	};
 }

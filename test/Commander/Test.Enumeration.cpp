@@ -19,16 +19,17 @@ namespace Commander
 		PNG, JPEG, WEBP_LOSSY, WEBP_LOSSLESS, RAW
 	};
 	
-	const std::map<std::string, OutputFormat> OutputFormatKeys {
-		{"png", OutputFormat::PNG},
-		{"jpeg", OutputFormat::JPEG},
-		{"webp-lossy", OutputFormat::WEBP_LOSSY},
-		{"webp-lossless", OutputFormat::WEBP_LOSSLESS},
-		{"raw", OutputFormat::RAW}
-	};
-	
 	template <>
-	struct OptionTraits<OutputFormat> : public EnumerationTraits<OutputFormat, OutputFormatKeys> {};
+	struct OptionTraits<OutputFormat> : public EnumerationTraits<OutputFormat>
+	{
+		OptionTraits() : EnumerationTraits<OutputFormat>{{
+			{"png", OutputFormat::PNG},//, "PNG pixel data."},
+			{"jpeg", OutputFormat::JPEG},//, "JPEG pixel data."},
+			{"webp-lossy", OutputFormat::WEBP_LOSSY},//, "Lossy WebP pixel data."},
+			{"webp-lossless", OutputFormat::WEBP_LOSSY},//, "WebP pixel data."},
+			{"raw", OutputFormat::RAW},//, "Lossy WebP pixel data."},
+		}} {}
+	};
 	
 	class EnumerationProgram : public Command
 	{
@@ -36,14 +37,6 @@ namespace Commander
 		EnumerationProgram(Commands & commands) : Command(commands) {}
 
 		Options options{table};
-		
-		// Enumeration<OutputFormat> output_formats{
-		// 	{"png", OutputFormat::PNG, "PNG pixel data."}
-		// 	{"jpeg", OutputFormat::JPEG, "JPEG pixel data."}
-		// 	{"webp-lossy", OutputFormat::WEBP_LOSSY, "Lossy WebP pixel data."}
-		// 	{"webp-lossless", OutputFormat::WEBP_LOSSY, "WebP pixel data."}
-		// 	{"raw", OutputFormat::RAW, "Lossy WebP pixel data."}
-		// };
 		
 		Option<OutputFormat> output_format{options, {"-f", "--output-format"}, "The output pixel buffer format.", OutputFormat::PNG};
 	};

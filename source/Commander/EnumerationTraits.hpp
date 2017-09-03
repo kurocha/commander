@@ -15,15 +15,21 @@
 
 namespace Commander
 {
-	template <typename ValueT, const std::map<std::string, ValueT> & KEYS>
+	template <typename ValueT>
 	struct EnumerationTraits
 	{
-		static ValueT parse(IteratorT & begin, IteratorT end)
+		using KeysT = std::map<ArgumentT, ValueT>;
+		
+		KeysT keys;
+		
+		EnumerationTraits(const KeysT & _keys) : keys(_keys) {}
+		
+		ValueT parse(IteratorT & begin, IteratorT end) const
 		{
 			if (begin != end) {
-				auto pair = KEYS.find(*begin++);
+				auto pair = keys.find(*begin++);
 				
-				if (pair != KEYS.end()) {
+				if (pair != keys.end()) {
 					return pair->second;
 				}
 			}
@@ -32,14 +38,14 @@ namespace Commander
 		}
 		
 		template <typename OptionT>
-		static void assign(OptionT * option, const ValueT & value)
+		void assign(OptionT * option, const ValueT & value) const
 		{
 			option->set(value);
 		}
 		
-		static void print_value(const ValueT & value, std::ostream & output)
+		void print_value(const ValueT & value, std::ostream & output) const
 		{
-			for (auto & pair : KEYS) {
+			for (auto & pair : keys) {
 				if (pair.second == value) {
 					output << pair.first;
 					
@@ -51,12 +57,12 @@ namespace Commander
 		}
 		
 		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
+		void print_usage(const OptionT * option, std::ostream & output) const
 		{
 			output << '[' << option->flags() << " <";
 			
 			bool first = true;
-			for (auto & pair : KEYS) {
+			for (auto & pair : keys) {
 				if (first) first = false;
 				else output << '/';
 				

@@ -14,10 +14,10 @@
 
 namespace Commander
 {
-	template <typename T>
+	template <typename ValueT>
 	struct OptionTraits
 	{
-		static T parse(IteratorT & begin, IteratorT end)
+		ValueT parse(IteratorT & begin, IteratorT end) const
 		{
 			if (begin != end) {
 				return *begin++;
@@ -27,18 +27,18 @@ namespace Commander
 		}
 		
 		template <typename OptionT>
-		static void assign(OptionT * option, const T & value)
+		void assign(OptionT * option, const ValueT & value) const
 		{
 			option->set(value);
 		}
 		
-		static void print_value(const T & value, std::ostream & output)
+		void print_value(const ValueT & value, std::ostream & output) const
 		{
 			output << value;
 		}
 		
 		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
+		void print_usage(const OptionT * option, std::ostream & output) const
 		{
 			output << '[' << option->flags() << " <value>]";
 		}
@@ -47,41 +47,41 @@ namespace Commander
 	template<>
 	struct OptionTraits<bool>
 	{
-		static bool parse(IteratorT & begin, IteratorT end)
+		bool parse(IteratorT & begin, IteratorT end) const
 		{
 			return true;
 		}
 		
 		template <typename OptionT>
-		static void assign(OptionT * option, const bool & value)
+		void assign(OptionT * option, const bool & value) const
 		{
 			option->set(value);
 		}
 		
-		static void print_value(const bool & value, std::ostream & output)
+		void print_value(const bool & value, std::ostream & output) const
 		{
 			output << (value ? "yes" : "no");
 		}
 		
 		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
+		void print_usage(const OptionT * option, std::ostream & output) const
 		{
 			output << '[' << option->flags() << ']';
 		}
 	};
 	
-	template<typename T>
-	struct OptionTraits<std::vector<T>>
+	template <typename ValueT>
+	struct OptionTraits<std::vector<ValueT>> : public OptionTraits<ValueT>
 	{
-		using TraitsT = OptionTraits<T>;
+		using OptionTraits<ValueT>::OptionTraits;
 		
-		static T parse(IteratorT & begin, IteratorT end)
+		ValueT parse(IteratorT & begin, IteratorT end) const
 		{
-			return TraitsT::parse(begin, end);
+			return OptionTraits<ValueT>::parse(begin, end);
 		}
 		
 		template <typename OptionT>
-		static void assign(OptionT * option, const T & value)
+		void assign(OptionT * option, const ValueT & value) const
 		{
 			// If the user sets something, we clear all the default values.
 			if (option->specified() == Specified::DEFAULT) {
@@ -91,7 +91,7 @@ namespace Commander
 			option->value().push_back(value);
 		}
 		
-		static void print_value(const std::vector<T> & value, std::ostream & output)
+		void print_value(const std::vector<ValueT> & value, std::ostream & output) const
 		{
 			output << '{';
 			bool first = true;
@@ -99,15 +99,15 @@ namespace Commander
 				if (first) first = false;
 				else output << ", ";
 				
-				TraitsT::print_value(item, output);
+				OptionTraits<ValueT>::print_value(item, output);
 			}
 			output << '}';
 		}
 		
 		template <typename OptionT>
-		static void print_usage(const OptionT * option, std::ostream & output)
+		void print_usage(const OptionT * option, std::ostream & output) const
 		{
-			TraitsT::print_usage(option, output);
+			OptionTraits<ValueT>::print_usage(option, output);
 			output << '*';
 		}
 	};
