@@ -73,6 +73,12 @@ namespace Commander
 			}
 		}
 		
+		virtual void print_full_usage(std::ostream & output, std::size_t level) const noexcept
+		{
+			Field::print_full_usage(output, level);
+			_traits.print_full_usage(output, level+1);
+		}
+		
 	protected:
 		Flags _flags;
 		

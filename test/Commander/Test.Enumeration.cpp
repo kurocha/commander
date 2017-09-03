@@ -20,25 +20,27 @@ namespace Commander
 	};
 	
 	template <>
-	struct OptionTraits<OutputFormat> : public EnumerationTraits<OutputFormat>
+	class OptionTraits<OutputFormat> : public EnumerationTraits<OutputFormat>
 	{
-		OptionTraits() : EnumerationTraits<OutputFormat>{{
-			{"png", OutputFormat::PNG},//, "PNG pixel data."},
-			{"jpeg", OutputFormat::JPEG},//, "JPEG pixel data."},
-			{"webp-lossy", OutputFormat::WEBP_LOSSY},//, "Lossy WebP pixel data."},
-			{"webp-lossless", OutputFormat::WEBP_LOSSY},//, "WebP pixel data."},
-			{"raw", OutputFormat::RAW},//, "Lossy WebP pixel data."},
-		}} {}
+	public:
+		OptionTraits() : EnumerationTraits<OutputFormat>{
+			{"png", OutputFormat::PNG, "PNG encoded data."},
+			{"jpeg", OutputFormat::JPEG, "JPEG encoded data."},
+			{"webp-lossy", OutputFormat::WEBP_LOSSY, "WebP lossy encoded data."},
+			{"webp-lossless", OutputFormat::WEBP_LOSSY, "WebP lossless encoded data."},
+			{"raw", OutputFormat::RAW, "Raw RGBA data."},
+		} {}
 	};
 	
 	class EnumerationProgram : public Command
 	{
 	public:
-		EnumerationProgram(Commands & commands) : Command(commands) {}
+		EnumerationProgram(Commands & commands) : Command(commands, "", "Enumerate some values") {}
 
 		Options options{table};
 		
 		Option<OutputFormat> output_format{options, {"-f", "--output-format"}, "The output pixel buffer format.", OutputFormat::PNG};
+		Option<std::string> output_path{options, {"-o", "--output-path"}, "The output path", "things.txt"};
 	};
 	
 	UnitTest::Suite EnumerationTestSuite {

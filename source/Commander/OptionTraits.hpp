@@ -15,8 +15,9 @@
 namespace Commander
 {
 	template <typename ValueT>
-	struct OptionTraits
+	class OptionTraits
 	{
+	public:
 		ValueT parse(IteratorT & begin, IteratorT end) const
 		{
 			if (begin != end) {
@@ -42,11 +43,14 @@ namespace Commander
 		{
 			output << '[' << option->flags() << " <value>]";
 		}
+		
+		void print_full_usage(std::ostream & output, std::size_t level) const {}
 	};
 	
 	template<>
-	struct OptionTraits<bool>
+	class OptionTraits<bool>
 	{
+	public:
 		bool parse(IteratorT & begin, IteratorT end) const
 		{
 			return true;
@@ -68,11 +72,14 @@ namespace Commander
 		{
 			output << '[' << option->flags() << ']';
 		}
+		
+		void print_full_usage(std::ostream & output, std::size_t level) const {}
 	};
 	
 	template <typename ValueT>
-	struct OptionTraits<std::vector<ValueT>> : public OptionTraits<ValueT>
+	class OptionTraits<std::vector<ValueT>> : public OptionTraits<ValueT>
 	{
+	public:
 		using OptionTraits<ValueT>::OptionTraits;
 		
 		ValueT parse(IteratorT & begin, IteratorT end) const
@@ -110,5 +117,7 @@ namespace Commander
 			OptionTraits<ValueT>::print_usage(option, output);
 			output << '*';
 		}
+		
+		void print_full_usage(std::ostream & output, std::size_t level) const {}
 	};
 }

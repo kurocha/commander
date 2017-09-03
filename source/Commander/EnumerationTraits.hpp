@@ -11,25 +11,35 @@
 #include "Parser.hpp"
 
 #include <map>
+#include <vector>
 #include <iostream>
 
 namespace Commander
 {
 	template <typename ValueT>
-	struct EnumerationTraits
+	class EnumerationTraits
 	{
-		using KeysT = std::map<ArgumentT, ValueT>;
+	public:
+		struct Mapping
+		{
+			std::string key;
+			ValueT value;
+			std::string description;
+		};
 		
-		KeysT keys;
-		
-		EnumerationTraits(const KeysT & _keys) : keys(_keys) {}
+		EnumerationTraits(std::initializer_list<Mapping> mappings) : _mappings(mappings)
+		{
+			for (auto & mapping : _mappings) {
+				_keyed.insert({mapping.key, mapping.value});
+			}
+		}
 		
 		ValueT parse(IteratorT & begin, IteratorT end) const
 		{
 			if (begin != end) {
-				auto pair = keys.find(*begin++);
+				auto pair = _keyed.find(*begin++);
 				
-				if (pair != keys.end()) {
+				if (pair != _keyed.end()) {
 					return pair->second;
 				}
 			}
@@ -45,9 +55,9 @@ namespace Commander
 		
 		void print_value(const ValueT & value, std::ostream & output) const
 		{
-			for (auto & pair : keys) {
-				if (pair.second == value) {
-					output << pair.first;
+			for (auto & mapping : _mappings) {
+				if (mapping.value == value) {
+					output << mapping.key;
 					
 					return;
 				}
@@ -59,17 +69,59 @@ namespace Commander
 		template <typename OptionT>
 		void print_usage(const OptionT * option, std::ostream & output) const
 		{
-			output << '[' << option->flags() << " <";
+			output << '[' << option->flags() << " <key>]";
 			
-			bool first = true;
-			for (auto & pair : keys) {
-				if (first) first = false;
-				else output << '/';
+			// bool first = true;
+			// for (auto & mapping : _mappings) {
+			// 	if (first) first = false;
+			// 	else output << '/';
+			// 	
+			// 	output << mapping.key;
+			// }
+			// 
+			// output << '>' << ']';
+		}
+		
+		void print_full_usage(std::ostream & output, std::size_t level) const
+		{
+			output << std::string(level, '\t');
+			
+			auto size = _mappings.size();
+			
+			if (size == 0) {
+				output << "No values available." << std::endl;
+			} else if (size == 1) {
+				output << "<key> must be " << _mappings.front().key << '.' << std::endl;
+			} else {
+				output << "<key> must be one of ";
+				bool first = true;
 				
-				output << pair.first;
+				for (auto & mapping : _mappings) {
+					if (!first) output << ", ";
+					else first = false;
+					
+					output << mapping.key;
+				}
+				
+				output << '.';
 			}
 			
-			output << '>' << ']';
+			output << std::endl;
+			
+			print_mappings(output, level+1);
 		}
+		
+		void print_mappings(std::ostream & output, std::size_t level) const
+		{
+			std::string indent(level, '\t');
+			
+			for (auto & mapping : _mappings) {
+				output << indent << mapping.key << ": " << mapping.description << std::endl;
+			}
+		}
+		
+	protected:
+		std::vector<Mapping> _mappings;
+		std::map<ArgumentT, ValueT> _keyed;
 	};
 }

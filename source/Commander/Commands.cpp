@@ -54,12 +54,12 @@ namespace Commander
 		auto size = _fields.size();
 		
 		if (size == 0) {
-			output << "No commands available." << std::endl;
+			output << "Is unavailable." << std::endl;
 		} else if (size == 1) {
 			auto front = _fields.begin();
-			output << "Only " << front->first << '.' << std::endl;
+			output << "Must be " << front->first << '.' << std::endl;
 		} else {
-			output << "One of ";
+			output << "Must be one of ";
 			bool first = true;
 			
 			for (auto & field : _fields) {
@@ -73,6 +73,7 @@ namespace Commander
 		}
 		
 		if (_command) {
+			// TODO: Fix this to use Variable..
 			output << " Default: " << _command->name() << ".";
 		}
 	}
