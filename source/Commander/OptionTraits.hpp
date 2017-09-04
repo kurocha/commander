@@ -15,18 +15,9 @@
 namespace Commander
 {
 	template <typename ValueT>
-	class OptionTraits
+	class ValueTraits
 	{
 	public:
-		ValueT parse(IteratorT & begin, IteratorT end) const
-		{
-			if (begin != end) {
-				return *begin++;
-			} else {
-				throw ArgumentError("Reached end of input!", begin);
-			}
-		}
-		
 		template <typename OptionT>
 		void assign(OptionT * option, const ValueT & value) const
 		{
@@ -45,6 +36,20 @@ namespace Commander
 		}
 		
 		void print_full_usage(std::ostream & output, std::size_t level) const {}
+	};
+	
+	template <typename ValueT>
+	class OptionTraits : public ValueTraits<ValueT>
+	{
+	public:
+		ValueT parse(IteratorT & begin, IteratorT end) const
+		{
+			if (begin != end) {
+				return *begin++;
+			} else {
+				throw ArgumentError("Reached end of input!", begin);
+			}
+		}
 	};
 	
 	template<>
