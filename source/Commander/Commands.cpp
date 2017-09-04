@@ -86,7 +86,7 @@ namespace Commander
 			print_command_usage(output, level);
 		}
 		
-		//output << std::endl;
+		output << std::endl;
 		
 		for (auto & field : _fields) {
 			output << std::endl;

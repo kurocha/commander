@@ -41,5 +41,4 @@ namespace Commander
 	protected:
 		std::string _name;
 	};
-
 }
