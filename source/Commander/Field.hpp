@@ -24,6 +24,12 @@ namespace Commander
 		
 		Field(const Field &) = delete;
 		
+		template <typename ArgumentsT>
+		bool parse(const ArgumentsT & arguments)
+		{
+			return parse(arguments.begin(), arguments.end()) == arguments.begin();
+		}
+		
 		virtual IteratorT parse(IteratorT begin, IteratorT end)
 		{
 			return begin;
