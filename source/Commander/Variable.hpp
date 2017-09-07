@@ -33,6 +33,7 @@ namespace Commander
 		
 		explicit operator bool() {return _specified != Specified::UNSET;}
 		auto & operator*() const noexcept {return _value;}
+		auto  operator->() const noexcept {return &_value;}
 		
 	protected:
 		ValueT _value;
