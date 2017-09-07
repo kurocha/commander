@@ -24,12 +24,12 @@ namespace Commander
 		NumericT parse(IteratorT & begin, IteratorT end) const
 		{
 			if (begin != end) {
-				NumericT number;
+				NumericT number = 0;
 				
 				std::stringstream stream(*begin++);
 				stream >> number;
 				
-				if (!stream.good()) {
+				if (stream.fail()) {
 					throw ArgumentError("Could not parse number!", begin);
 				}
 				
