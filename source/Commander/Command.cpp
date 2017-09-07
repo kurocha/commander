@@ -18,17 +18,7 @@ namespace Commander
 	
 	IteratorT Command::parse(IteratorT begin, IteratorT end)
 	{
-		if (begin != end) {
-			if (_name.empty()) {
-				_name = *begin;
-
-				return table.parse(++begin, end);
-			} else if (_name == *begin) {
-				return table.parse(++begin, end);
-			}
-		}
-
-		return begin;
+		return table.parse(begin, end);
 	}
 	
 	void Command::print_usage(std::ostream & output) const noexcept

@@ -37,6 +37,7 @@ namespace Commander
 		virtual void print_full_usage(std::ostream & output, std::size_t level = 0) const noexcept;
 
 		auto name() const noexcept {return _name;}
+		void set_name(const std::string & name) {_name = name;}
 
 	protected:
 		std::string _name;

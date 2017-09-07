@@ -21,13 +21,21 @@ namespace Commander
 	IteratorT Commands::parse(IteratorT begin, IteratorT end)
 	{
 		if (begin != end) {
+			// We extract the command name if possible:
 			auto pair = _fields.find(*begin);
-
-			if (pair == _fields.end())
-				pair = _fields.find("");
-
+			
 			if (pair != _fields.end()) {
 				_command = pair->second;
+				++begin;
+			}
+			
+			// A command with an empty name assumes whatever was specified.
+			pair = _fields.find("");
+			
+			if (pair != _fields.end()) {
+				_command = pair->second;
+				_command->set_name(*begin);
+				++begin;
 			}
 		}
 		
